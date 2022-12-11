@@ -1,0 +1,20 @@
+#!/bin/bash
+ZIESHA_LIST_ADDRESS=./ziesha_Users_address.txt
+if [[ -f "$ZIESHA_LIST_ADDRESS" ]]; then
+    echo ""
+else
+    echo "Downloading Mina Address List"
+    sleep 5
+    wget "https://raw.githubusercontent.com/AkiAfroo/zieshasender/main/ziesha_Users_address.txt"
+fi
+clear
+read -p "Amount you want to send: " ziesha_amount
+#read -p "Amount of fee you want to paid: " ziesha_fee
+mkdir -p zieshasenderlogs
+
+IFS=$'\n';for ZIESHA_ADDRESS in `cat ziesha_Users_address.txt`; do
+bazuka wallet rsend \
+--amount $ziesha_amount \
+--to ${ZIESHA_ADDRESS} | tee ./zieshasenderlogs/${ZIESHA_ADDRESS}.log && sleep 10;
+echo "Done!"
+ done
